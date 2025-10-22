@@ -1,13 +1,14 @@
 import express from 'express';
 import cors from 'cors';
 import indexRoutes from '../routes/index.routes.js';
+import * as db from '../db/cnn_mongodb.js';
 
 export default class Server {
 
     constructor() {
 
         this.app = express();
-        this.port = 3000;
+        this.port = process.env.PORT || 3000;
         this.generalRoute = '/api/';
 
         // Middlewares
@@ -15,6 +16,16 @@ export default class Server {
 
         // Rutas de mi aplicacion
         this.routes();
+
+    }
+
+    async conectarDBMongo() {
+
+        if(!db.isConnected){
+
+            await db.conectarAMongoDB();
+
+        }
 
     }
 
@@ -34,6 +45,15 @@ export default class Server {
     routes() {
 
         this.app.use(this.generalRoute, indexRoutes);
+        this.app.use('', (req, res) => {
+
+            res.status(404).json({
+
+                msg: 'Ruta no encontrada'
+
+            });
+
+        });
 
     }
 
@@ -41,7 +61,7 @@ export default class Server {
 
         this.app.listen(this.port, () => {
 
-            console.log('Servidor corriendo en puerto', this.port);
+            console.log('Servidor corriendo en puerto', `${this.port}`.yellow);
 
         });
 
