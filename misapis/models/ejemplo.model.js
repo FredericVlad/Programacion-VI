@@ -9,24 +9,38 @@ const ejemploSchema = new mongoose.Schema({
 
     },
 
-    apellido: {
+    desarrolladora: {
 
         type: String,
         required: true
 
     },
 
-    edad: {
+    año_de_salida: {
 
         type: Number,
         required: true
 
     },
 
-    contacto: {
+    numero_de_jugadores: {
+
+        type: Number,
+        required: false
+
+    },
+
+    genero: {
+
+        type: String,
+        required: false
+
+    },
+
+    consolas: {
 
         type: [String],
-        required: false
+        required: true
 
     }
 
