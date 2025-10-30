@@ -41,6 +41,8 @@ export default class Server {
         // Directorio publico
         this.app.use(express.static('public'));
 
+        this.app.use('/imagenes', express.static('imagenes'));
+
     }
 
     routes() {
