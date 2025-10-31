@@ -1,3 +1,587 @@
-<!-- error 404 -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Lista de Uma Musume</title>
+  <style>
+    body {
+      background-color: #1a1a1a;
+      color: #ffffff;
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
 
-<h2>Error página no encontrada</h2>
+    h1 {
+      text-align: center;
+      color: #ff69b4;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+      margin-bottom: 30px;
+    }
+
+    h2 {
+      color: #ff69b4;
+      margin-bottom: 20px;
+    }
+
+    .forms-wrapper {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin-top: 40px;
+      flex-wrap: wrap;
+    }
+
+    .form-container {
+      background-color: #2a2a2a;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      flex: 1;
+      min-width: 300px;
+      max-width: 500px;
+    }
+
+    .form-container input {
+      width: 100%;
+      padding: 8px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 4px;
+      background-color: #3a3a3a;
+      color: #ffffff;
+    }
+
+    .form-container label {
+      color: #ff69b4;
+    }
+
+    button {
+      background-color: #ff69b4;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #ff1493;
+    }
+
+    #uma-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 25px;
+      padding: 20px;
+    }
+
+    .uma-card {
+      background-color: #2a2a2a;
+      border-radius: 15px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .uma-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+    }
+
+    .uma-card img {
+      width: 280px;
+      height: 280px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+      transition: transform 0.3s;
+    }
+
+    .uma-card img:hover {
+      transform: scale(1.02);
+    }
+
+    /* Estilos para el modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    .modal-content {
+      background-color: #2a2a2a;
+      margin: auto;
+      padding: 30px;
+      border-radius: 15px;
+      max-width: 800px;
+      position: relative;
+      top: 50%;
+      transform: translateY(-50%);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #ff69b4;
+      padding-bottom: 15px;
+    }
+
+    .modal-title {
+      color: #ff69b4;
+      font-size: 24px;
+      margin: 0;
+    }
+
+    .close-modal {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 24px;
+      cursor: pointer;
+      padding: 5px;
+      transition: color 0.3s;
+    }
+
+    .close-modal:hover {
+      color: #ff69b4;
+    }
+
+    .modal-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      align-items: start;
+    }
+
+    .modal-image {
+      width: 100%;
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+
+    .modal-info {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .info-item {
+      background-color: #363636;
+      padding: 15px;
+      border-radius: 10px;
+      border-left: 4px solid #ff69b4;
+    }
+
+    .info-item strong {
+      color: #ff69b4;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-top: 10px;
+    }
+
+    .stat-item {
+      background-color: #2a2a2a;
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .stat-label {
+      color: #ff69b4;
+      font-size: 0.9em;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .stat-value {
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+
+    @media (max-width: 768px) {
+      .modal-body {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .uma-card strong {
+      color: #ff69b4;
+      font-size: 1.2em;
+      display: block;
+      margin: 10px 0;
+    }
+
+    .button-group {
+      margin-top: 15px;
+    }
+
+    .button-group button {
+      background-color: #dc3545;
+      margin: 5px;
+    }
+
+    .button-group button:hover {
+      background-color: #c82333;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Lista de Uma Musume</h1>
+
+  <!-- Contenedor de cards -->
+  <div id="uma-container"></div>
+
+  <!-- Wrapper para los formularios -->
+  <div class="forms-wrapper">
+    <!-- Formulario para crear nueva Uma -->
+    <div class="form-container">
+      <h2>Agregar Nueva Uma Musume</h2>
+      <form id="createUmaForm">
+        <div class="form-group">
+          <label for="nombre">Nombre:</label>
+          <input type="text" id="nombre" required placeholder="Ingrese el nombre">
+        </div>
+        <div class="form-group">
+          <label for="apodo">Apodo:</label>
+          <input type="text" id="apodo" required placeholder="Ingrese el apodo">
+        </div>
+        <div class="form-group">
+          <label for="genero">Género:</label>
+          <input type="text" id="genero" required placeholder="Ingrese el género">
+        </div>
+        <div class="form-group">
+          <label for="imagen">URL de la imagen:</label>
+          <input type="text" id="imagen" required placeholder="Ingrese la URL de la imagen">
+        </div>
+        <div class="form-group">
+          <label for="fecha_nacimiento">Año de Nacimiento:</label>
+          <input type="number" id="fecha_nacimiento" required placeholder="Ej: 2020" min="1900" max="2025">
+        </div>
+        <div class="form-group">
+          <label for="numero_de_carreras">Número de Carreras:</label>
+          <input type="number" id="numero_de_carreras" placeholder="Número total de carreras" min="0">
+        </div>
+        <div class="form-group">
+          <label for="carreras_ganadas">Carreras Ganadas:</label>
+          <input type="number" id="carreras_ganadas" placeholder="Carreras ganadas" min="0">
+        </div>
+        <div class="form-group">
+          <label for="carreras_perdidas">Carreras Perdidas:</label>
+          <input type="number" id="carreras_perdidas" placeholder="Carreras perdidas" min="0">
+        </div>
+        <button type="submit"> Crear Uma</button>
+      </form>
+    </div>
+
+    <!-- Formulario para actualizar Uma -->
+    <div class="form-container">
+      <h2>Actualizar Uma Musume</h2>
+      <form id="updateUmaForm">
+        <div class="form-group">
+          <label for="updateId">ID:</label>
+          <input type="text" id="updateId" required placeholder="Ingrese el ID">
+        </div>
+        <div class="form-group">
+          <label for="updateNombre">Nombre:</label>
+          <input type="text" id="updateNombre" required placeholder="Ingrese el nuevo nombre">
+        </div>
+        <div class="form-group">
+          <label for="updateApodo">Apodo:</label>
+          <input type="text" id="updateApodo" required placeholder="Ingrese el nuevo apodo">
+        </div>
+        <div class="form-group">
+          <label for="updateGenero">Género:</label>
+          <input type="text" id="updateGenero" required placeholder="Ingrese el nuevo género">
+        </div>
+        <div class="form-group">
+          <label for="updateImagen">URL de la imagen:</label>
+          <input type="text" id="updateImagen" required placeholder="Ingrese la nueva URL de la imagen">
+        </div>
+        <div class="form-group">
+          <label for="updateFecha_nacimiento">Año de Nacimiento:</label>
+          <input type="number" id="updateFecha_nacimiento" required placeholder="Ej: 2020" min="1900" max="2025">
+        </div>
+        <div class="form-group">
+          <label for="updateNumero_de_carreras">Número de Carreras:</label>
+          <input type="number" id="updateNumero_de_carreras" placeholder="Número total de carreras" min="0">
+        </div>
+        <div class="form-group">
+          <label for="updateCarreras_ganadas">Carreras Ganadas:</label>
+          <input type="number" id="updateCarreras_ganadas" placeholder="Carreras ganadas" min="0">
+        </div>
+        <div class="form-group">
+          <label for="updateCarreras_perdidas">Carreras Perdidas:</label>
+          <input type="number" id="updateCarreras_perdidas" placeholder="Carreras perdidas" min="0">
+        </div>
+        <button type="submit"> Actualizar Uma</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal para detalles -->
+  <div id="umaModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title"></h2>
+        <button class="close-modal" onclick="closeModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-image-container">
+          <img class="modal-image" src="" alt="">
+        </div>
+        <div class="modal-info">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Función para obtener todas las UMAs
+    const getUmas = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/api/uma');
+        const data = await response.json();
+        const container = document.getElementById('uma-container');
+        container.innerHTML = '';
+
+        if (Array.isArray(data.umas)) {
+          data.umas.forEach(uma => {
+            const div = document.createElement('div');
+            div.className = 'uma-card';
+            div.innerHTML = `
+              <img src="${uma.imagen}" alt="${uma.nombre}" onclick="showDetails('${uma._id}')">
+              <strong>${uma.nombre}</strong>
+              <p> Apodo: ${uma.apodo}</p>
+              <p> Género: ${uma.genero}</p>
+              <p class="id-text">🆔 ${uma._id}</p>
+              <div class="button-group">
+                <button onclick="showDetails('${uma._id}')" title="Ver detalles" class="detail-button">
+                   Ver detalles
+                </button>
+                <button onclick="deleteUma('${uma._id}')" title="Eliminar Uma">
+                   Eliminar
+                </button>
+              </div>
+            `;
+            container.appendChild(div);
+          });
+        } else {
+          container.innerHTML = '<p>No se recibieron UMAs válidas.</p>';
+        }
+      } catch (error) {
+        console.error('Error al obtener las UMAs:', error);
+      }
+    };
+
+    // Función para crear una nueva UMA
+    document.getElementById('createUmaForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const umaData = {
+        nombre: document.getElementById('nombre').value,
+        apodo: document.getElementById('apodo').value,
+        genero: document.getElementById('genero').value,
+        imagen: document.getElementById('imagen').value,
+        fecha_nacimiento: parseInt(document.getElementById('fecha_nacimiento').value),
+        numero_de_carreras: parseInt(document.getElementById('numero_de_carreras').value) || 0,
+        carreras_ganadas: parseInt(document.getElementById('carreras_ganadas').value) || 0,
+        carreras_perdidas: parseInt(document.getElementById('carreras_perdidas').value) || 0
+      };
+
+      try {
+        const response = await fetch('http://localhost:3000/api/uma', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(umaData)
+        });
+
+        if (response.ok) {
+          alert('Uma Musume creada exitosamente');
+          document.getElementById('createUmaForm').reset();
+          getUmas();
+        } else {
+          alert('Error al crear Uma Musume');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Error al crear Uma Musume');
+      }
+    });
+
+    // Función para actualizar una UMA
+    document.getElementById('updateUmaForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('updateId').value;
+      const umaData = {
+        nombre: document.getElementById('updateNombre').value,
+        apodo: document.getElementById('updateApodo').value,
+        genero: document.getElementById('updateGenero').value,
+        imagen: document.getElementById('updateImagen').value,
+        fecha_nacimiento: parseInt(document.getElementById('updateFecha_nacimiento').value),
+        numero_de_carreras: parseInt(document.getElementById('updateNumero_de_carreras').value) || 0,
+        carreras_ganadas: parseInt(document.getElementById('updateCarreras_ganadas').value) || 0,
+        carreras_perdidas: parseInt(document.getElementById('updateCarreras_perdidas').value) || 0
+      };
+
+      try {
+        const response = await fetch(`http://localhost:3000/api/uma/${id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(umaData)
+        });
+
+        if (response.ok) {
+          alert('Uma Musume actualizada exitosamente');
+          document.getElementById('updateUmaForm').reset();
+          getUmas();
+        } else {
+          alert('Error al actualizar Uma Musume');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Error al actualizar Uma Musume');
+      }
+    });
+
+    // Función para eliminar una UMA
+    async function deleteUma(id) {
+      if (confirm('¿Estás seguro de que deseas eliminar esta Uma Musume?')) {
+        try {
+          const response = await fetch(`http://localhost:3000/api/uma/${id}`, {
+            method: 'DELETE'
+          });
+
+          if (response.ok) {
+            alert('Uma Musume eliminada exitosamente');
+            getUmas();
+          } else {
+            alert('Error al eliminar Uma Musume');
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          alert('Error al eliminar Uma Musume');
+        }
+      }
+    }
+
+    // Función para mostrar detalles de una Uma
+    async function showDetails(id) {
+      try {
+        const response = await fetch(`http://localhost:3000/api/uma/${id}`);
+        const data = await response.json();
+        const uma = data.uma;
+
+        const modal = document.getElementById('umaModal');
+        const modalTitle = modal.querySelector('.modal-title');
+        const modalImage = modal.querySelector('.modal-image');
+        const modalInfo = modal.querySelector('.modal-info');
+
+        modalTitle.textContent = uma.nombre;
+        modalImage.src = uma.imagen;
+        modalImage.alt = uma.nombre;
+
+        modalInfo.innerHTML = `
+          <div class="info-item">
+            <strong>Nombre</strong>
+            <span>${uma.nombre}</span>
+          </div>
+          <div class="info-item">
+            <strong>Apodo</strong>
+            <span>${uma.apodo}</span>
+          </div>
+          <div class="info-item">
+            <strong>Género</strong>
+            <span>${uma.genero}</span>
+          </div>
+          <div class="info-item">
+            <strong>ID</strong>
+            <span>${uma._id}</span>
+          </div>
+          <div class="info-item">
+            <strong>Año de Nacimiento</strong>
+            <span>${uma.fecha_nacimiento}</span>
+          </div>
+          <div class="info-item">
+            <strong>Estadísticas de Carreras</strong>
+            <div class="stats-grid">
+              <div class="stat-item">
+                <span class="stat-label">Total de Carreras:</span>
+                <span class="stat-value">${uma.numero_de_carreras || 0}</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">Carreras Ganadas:</span>
+                <span class="stat-value">${uma.carreras_ganadas || 0}</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">Carreras Perdidas:</span>
+                <span class="stat-value">${uma.carreras_perdidas || 0}</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">Ratio de Victoria:</span>
+                <span class="stat-value">${uma.numero_de_carreras ? ((uma.carreras_ganadas / uma.numero_de_carreras) * 100).toFixed(1) + '%' : '0%'}</span>
+              </div>
+            </div>
+          </div>
+        `;
+
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+      } catch (error) {
+        console.error('Error al obtener detalles de la Uma:', error);
+      }
+    }
+
+    // Función para cerrar el modal
+    function closeModal() {
+      const modal = document.getElementById('umaModal');
+      modal.style.display = 'none';
+      document.body.style.overflow = 'auto';
+    }
+
+    // Cerrar modal al hacer clic fuera del contenido
+    window.onclick = function(event) {
+      const modal = document.getElementById('umaModal');
+      if (event.target === modal) {
+        closeModal();
+      }
+    }
+
+    // Cerrar modal con la tecla Escape
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape') {
+        closeModal();
+      }
+    });
+
+    // Cargar las UMAs al iniciar la página
+    getUmas();
+  </script>
+</body>
+</html>

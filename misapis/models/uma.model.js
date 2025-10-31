@@ -25,28 +25,28 @@ const umaSchema = new mongoose.Schema({
     fecha_nacimiento: {
 
         type: Number,
-        required: true
+        required: false
 
     },
 
     numero_de_carreras: {
 
         type: Number,
-        required: true
+        required: false
 
     },
 
     carreras_ganadas: {
 
         type: Number,
-        required: true
+        required: false
 
     },
 
     carreras_perdidas: {
 
         type: Number,
-        required: true
+        required: false
 
     },
 
