@@ -297,49 +297,7 @@
       </form>
     </div>
 
-    <!-- Formulario para actualizar Uma -->
-    <div class="form-container">
-      <h2>Actualizar Uma Musume</h2>
-      <form id="updateUmaForm">
-        <div class="form-group">
-          <label for="updateId">ID:</label>
-          <input type="text" id="updateId" required placeholder="Ingrese el ID">
-        </div>
-        <div class="form-group">
-          <label for="updateNombre">Nombre:</label>
-          <input type="text" id="updateNombre" required placeholder="Ingrese el nuevo nombre">
-        </div>
-        <div class="form-group">
-          <label for="updateApodo">Apodo:</label>
-          <input type="text" id="updateApodo" required placeholder="Ingrese el nuevo apodo">
-        </div>
-        <div class="form-group">
-          <label for="updateGenero">Género:</label>
-          <input type="text" id="updateGenero" required placeholder="Ingrese el nuevo género">
-        </div>
-        <div class="form-group">
-          <label for="updateImagen">URL de la imagen:</label>
-          <input type="text" id="updateImagen" required placeholder="Ingrese la nueva URL de la imagen">
-        </div>
-        <div class="form-group">
-          <label for="updateFecha_nacimiento">Año de Nacimiento:</label>
-          <input type="number" id="updateFecha_nacimiento" required placeholder="Ej: 2020" min="1900" max="2025">
-        </div>
-        <div class="form-group">
-          <label for="updateNumero_de_carreras">Número de Carreras:</label>
-          <input type="number" id="updateNumero_de_carreras" placeholder="Número total de carreras" min="0">
-        </div>
-        <div class="form-group">
-          <label for="updateCarreras_ganadas">Carreras Ganadas:</label>
-          <input type="number" id="updateCarreras_ganadas" placeholder="Carreras ganadas" min="0">
-        </div>
-        <div class="form-group">
-          <label for="updateCarreras_perdidas">Carreras Perdidas:</label>
-          <input type="number" id="updateCarreras_perdidas" placeholder="Carreras perdidas" min="0">
-        </div>
-        <button type="submit"> Actualizar Uma</button>
-      </form>
-    </div>
+    <!-- (Formulario de actualización movido a modal por-uma) -->
   </div>
 
   <!-- Modal para detalles -->
@@ -372,21 +330,24 @@
           data.umas.forEach(uma => {
             const div = document.createElement('div');
             div.className = 'uma-card';
-            div.innerHTML = `
-              <img src="${uma.imagen}" alt="${uma.nombre}" onclick="showDetails('${uma._id}')">
-              <strong>${uma.nombre}</strong>
-              <p> Apodo: ${uma.apodo}</p>
-              <p> Género: ${uma.genero}</p>
-              <p class="id-text">🆔 ${uma._id}</p>
-              <div class="button-group">
+        div.innerHTML = `
+          <img src="${uma.imagen}" alt="${uma.nombre}" onclick="showDetails('${uma._id}')">
+          <strong>${uma.nombre}</strong>
+          <p> Apodo: ${uma.apodo}</p>
+          <p> Género: ${uma.genero}</p>
+          <p class="id-text">🆔 ${uma._id}</p>
+          <div class="button-group">
                 <button onclick="showDetails('${uma._id}')" title="Ver detalles" class="detail-button">
-                   Ver detalles
-                </button>
-                <button onclick="deleteUma('${uma._id}')" title="Eliminar Uma">
-                   Eliminar
-                </button>
-              </div>
-            `;
+              Ver detalles
+           </button>
+           <button onclick="openEditModal('${uma._id}')" title="Editar Uma">
+              Editar
+           </button>
+           <button onclick="deleteUma('${uma._id}')" title="Eliminar Uma">
+              Eliminar
+           </button>
+          </div>
+        `;
             container.appendChild(div);
           });
         } else {
@@ -433,42 +394,7 @@
       }
     });
 
-    // Función para actualizar una UMA
-    document.getElementById('updateUmaForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const id = document.getElementById('updateId').value;
-      const umaData = {
-        nombre: document.getElementById('updateNombre').value,
-        apodo: document.getElementById('updateApodo').value,
-        genero: document.getElementById('updateGenero').value,
-        imagen: document.getElementById('updateImagen').value,
-        fecha_nacimiento: parseInt(document.getElementById('updateFecha_nacimiento').value),
-        numero_de_carreras: parseInt(document.getElementById('updateNumero_de_carreras').value) || 0,
-        carreras_ganadas: parseInt(document.getElementById('updateCarreras_ganadas').value) || 0,
-        carreras_perdidas: parseInt(document.getElementById('updateCarreras_perdidas').value) || 0
-      };
-
-      try {
-        const response = await fetch(`http://localhost:3000/api/uma/${id}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(umaData)
-        });
-
-        if (response.ok) {
-          alert('Uma Musume actualizada exitosamente');
-          document.getElementById('updateUmaForm').reset();
-          getUmas();
-        } else {
-          alert('Error al actualizar Uma Musume');
-        }
-      } catch (error) {
-        console.error('Error:', error);
-        alert('Error al actualizar Uma Musume');
-      }
-    });
+    // (La edición por-uma se maneja ahora mediante el modal de edición)
 
     // Función para eliminar una UMA
     async function deleteUma(id) {
@@ -555,6 +481,116 @@
         document.body.style.overflow = 'hidden';
       } catch (error) {
         console.error('Error al obtener detalles de la Uma:', error);
+      }
+    }
+
+    // Abrir modal de edición con formulario prellenado
+    async function openEditModal(id) {
+      try {
+        const response = await fetch(`http://localhost:3000/api/uma/${id}`);
+        const data = await response.json();
+        const uma = data.uma;
+
+        const modal = document.getElementById('umaModal');
+        const modalTitle = modal.querySelector('.modal-title');
+        const modalImage = modal.querySelector('.modal-image');
+        const modalInfo = modal.querySelector('.modal-info');
+
+        modalTitle.textContent = 'Editar: ' + (uma.nombre || '');
+        modalImage.src = uma.imagen || '';
+        modalImage.alt = uma.nombre || '';
+
+        modalInfo.innerHTML = `
+          <form id="editUmaForm">
+            <div class="form-group">
+              <label>Nombre</label>
+              <input type="text" id="editNombre" required>
+            </div>
+            <div class="form-group">
+              <label>Apodo</label>
+              <input type="text" id="editApodo">
+            </div>
+            <div class="form-group">
+              <label>Género</label>
+              <input type="text" id="editGenero" required>
+            </div>
+            <div class="form-group">
+              <label>Año de Nacimiento</label>
+              <input type="number" id="editFecha_nacimiento" min="1900" max="2100">
+            </div>
+            <div class="form-group">
+              <label>Número de Carreras</label>
+              <input type="number" id="editNumero_de_carreras" min="0">
+            </div>
+            <div class="form-group">
+              <label>Carreras Ganadas</label>
+              <input type="number" id="editCarreras_ganadas" min="0">
+            </div>
+            <div class="form-group">
+              <label>Carreras Perdidas</label>
+              <input type="number" id="editCarreras_perdidas" min="0">
+            </div>
+            <div class="form-group">
+              <label>URL Imagen</label>
+              <input type="text" id="editImagen">
+            </div>
+            <div class="button-group">
+              <button type="submit"> Guardar cambios</button>
+              <button type="button" onclick="closeModal()">Cancelar</button>
+            </div>
+          </form>
+        `;
+
+        // rellenar valores después de insertar el formulario
+        document.getElementById('editNombre').value = uma.nombre || '';
+        document.getElementById('editApodo').value = uma.apodo || '';
+        document.getElementById('editGenero').value = uma.genero || '';
+        document.getElementById('editFecha_nacimiento').value = uma.fecha_nacimiento || '';
+        document.getElementById('editNumero_de_carreras').value = uma.numero_de_carreras || 0;
+        document.getElementById('editCarreras_ganadas').value = uma.carreras_ganadas || 0;
+        document.getElementById('editCarreras_perdidas').value = uma.carreras_perdidas || 0;
+        document.getElementById('editImagen').value = uma.imagen || '';
+
+        // mostrar modal
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+
+        // listener para guardar cambios
+        document.getElementById('editUmaForm').addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const updated = {
+            nombre: document.getElementById('editNombre').value,
+            apodo: document.getElementById('editApodo').value,
+            genero: document.getElementById('editGenero').value,
+            imagen: document.getElementById('editImagen').value,
+            fecha_nacimiento: parseInt(document.getElementById('editFecha_nacimiento').value) || null,
+            numero_de_carreras: parseInt(document.getElementById('editNumero_de_carreras').value) || 0,
+            carreras_ganadas: parseInt(document.getElementById('editCarreras_ganadas').value) || 0,
+            carreras_perdidas: parseInt(document.getElementById('editCarreras_perdidas').value) || 0
+          };
+
+          try {
+            const res = await fetch(`http://localhost:3000/api/uma/${id}`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(updated)
+            });
+
+            if (res.ok) {
+              alert('Uma Musume actualizada exitosamente');
+              closeModal();
+              getUmas();
+            } else {
+              alert('Error al actualizar Uma Musume');
+            }
+          } catch (err) {
+            console.error('Error al actualizar (modal):', err);
+            alert('Error al actualizar Uma Musume');
+          }
+        });
+
+      } catch (error) {
+        console.error('Error al abrir modal de edición:', error);
       }
     }
 
