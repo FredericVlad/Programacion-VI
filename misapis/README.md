@@ -14,6 +14,14 @@ Aplicación web para gestionar información de Uma Musume con interfaz moderna y
 -  Modal de detalles con información completa
 -  Navbar Bootstrap con estilo personalizado
 
+## Últimos cambios
+
+- Integración completa con **Bootstrap 5** (CDN) y adaptación del CSS personalizado.
+- Título principal actualizado usando una fuente elegante (Playfair Display) y efecto de brillo similar al logo.
+- El formulario de creación se movió a un **modal** que se abre desde un botón "✨ Agregar Nueva Uma Musume".
+- Edición por-uma: cada card tiene ahora un botón **Editar** que abre un modal prellenado para esa Uma (se eliminó el formulario global de actualización).
+- Mejoras en accesibilidad y uso de componentes estándar de Bootstrap (modales, botones, formularios y grid).
+
 ## Requisitos
 
 - Node.js 16+ instalado
@@ -65,10 +73,10 @@ Aplicación web para gestionar información de Uma Musume con interfaz moderna y
 ## Uso de la Aplicación
 
 ### Crear Uma Musume
-1. Rellena el formulario "Agregar Nueva Uma Musume" en la parte inferior
-2. Completa todos los campos requeridos
-3. Haz clic en " Crear Uma"
-4. La nueva Uma aparecerá en el grid de cards
+1. Haz clic en el botón grande "✨ Agregar Nueva Uma Musume" arriba del catálogo. Esto abrirá un modal con el formulario.
+2. Completa los campos requeridos en el modal (nombre, apodo, género, año de nacimiento, estadísticas, URL de imagen).
+3. Haz clic en "✨ Crear Uma" dentro del modal.
+4. Si la creación es exitosa el modal se cerrará automáticamente y la nueva Uma aparecerá en el grid de cards.
 
 ### Ver Detalles
 1. Haz clic en " Ver detalles" en cualquier card
